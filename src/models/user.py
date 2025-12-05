@@ -2,10 +2,9 @@ from sqlalchemy import Column, Integer, String, Boolean, Enum as SqEnum
 from src.database import Base
 import enum
 
-# Definimos los roles posibles
 class UserRole(str, enum.Enum):
-    ADMIN = "admin"
-    USER = "user"
+    ADMIN = "admin"  # Puede gestionar usuarios y eventos
+    USER = "user"    # Solo puede comprar tickets
 
 class User(Base):
     __tablename__ = "users"
@@ -15,5 +14,5 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
     
-    # Nuevo campo de Rol (Por defecto todos son usuarios normales)
+    # Campo de Rol: Por defecto todo el mundo nace como 'user'
     role = Column(SqEnum(UserRole), default=UserRole.USER)

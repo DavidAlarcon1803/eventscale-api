@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from src.database import engine, Base
-from src.routers import tickets, auth, events, admin# Importar TODOS los modelos aquí para que Base.metadata los vea
+from src.routers import tickets, auth, events, admin, users# Importar TODOS los modelos aquí para que Base.metadata los vea
 from src.models.user import User
 from src.models.ticket import Ticket
 from src.models.event import Event # <--- Importante
@@ -21,6 +21,7 @@ app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 app.include_router(tickets.router, prefix="/tickets", tags=["Tickets"])
 app.include_router(events.router, prefix="/events", tags=["Events"]) 
 app.include_router(admin.router, prefix="/admin", tags=["Admin Panel"])
+app.include_router(users.router, prefix="/users", tags=["User Management (Admin Only)"])
 
 @app.get("/")
 def root():
