@@ -1,21 +1,31 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from src.database import engine, Base
-from src.routers import tickets, auth, events, admin, users# Importar TODOS los modelos aquí para que Base.metadata los vea
-from src.models.user import User
-from src.models.ticket import Ticket
-from src.models.event import Event # <--- Importante
+from src.routers import tickets, auth, events, admin, users
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # NOTA: En producción real se usa Alembic.
-    # Como cambiamos la estructura de tablas, esto intentará crearlas.
-    # Si da error, tendremos que borrar las tablas viejas en Neon.
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
 
 app = FastAPI(title="EventScale API", lifespan=lifespan)
+
+origins = [
+    "http://localhost:5173",
+    "https://portafolio-blond-five-68.vercel.app",
+    "https://portafolio-blond-five-68.vercel.app/"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 app.include_router(tickets.router, prefix="/tickets", tags=["Tickets"])
