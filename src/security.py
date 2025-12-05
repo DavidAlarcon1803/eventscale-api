@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from src.database import get_db
-from src.models.user import User
+from src.models.user import User,UserRole
 import os
 
 # CONFIGURACIÓN (Intenta leer de variables de entorno o usa defaults para dev)
@@ -53,3 +53,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession
     if user is None:
         raise credentials_exception
     return user
+
+async def get_current_admin(current_user: User = Depends(get_current_user)):
+    # Verificamos si el rol es ADMIN
+    if current_user.role != UserRole.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="No tienes permisos de administrador para realizar esta acción"
+        )
+    return current_user
