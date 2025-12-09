@@ -13,7 +13,7 @@
 
 Este backend actúa como la API RESTful que alimenta al proyecto **Portafolio Profesional & Sistema de Gestión (React + Vite)**.
 
-* **Repositorio Frontend:** [Portafolio & Dashboard](https://github.com/tu-usuario/nombre-repo-frontend) *(Asegúrate de poner el link real si lo tienes)*
+* **Repositorio Frontend:** [Portafolio & Dashboard](https://github.com/DavidAlarcon1803/portafolio.git)
 * **🚀 Demo del Cliente:** [https://portafolio-blond-five-68.vercel.app/](https://portafolio-blond-five-68.vercel.app/)
 
 La API proporciona los endpoints necesarios para:
