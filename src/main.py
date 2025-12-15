@@ -1,17 +1,22 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from contextlib import asynccontextmanager
 from src.database import engine, Base
 from src.routers import tickets, auth, events, admin, users
-
-
+from src.docs_custom import custom_openapi, custom_css
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
 
-app = FastAPI(title="EventScale API", lifespan=lifespan)
+app = FastAPI(
+    title="EventScale API", 
+    lifespan=lifespan,
+    docs_url=None, 
+    redoc_url=None
+)
 
 origins = [
     "http://localhost:5173",
@@ -26,6 +31,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/docs", include_in_schema=False)
+async def custom_swagger_ui_html():
+    html = custom_openapi(app)
+    return HTMLResponse(content=html.body.decode("utf-8").replace("</body>", f"{custom_css}</body>"))
 
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 app.include_router(tickets.router, prefix="/tickets", tags=["Tickets"])
