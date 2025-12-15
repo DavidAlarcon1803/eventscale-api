@@ -11,9 +11,7 @@ def custom_openapi(app):
         swagger_js_url="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-bundle.js",
         swagger_css_url="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui.css",
         swagger_favicon_url="https://fastapi.tiangolo.com/img/favicon.png",
-        
-        swagger_ui_parameters={"defaultModelsExpandDepth": -1},
-        html_content_custom=None 
+        swagger_ui_parameters={"defaultModelsExpandDepth": -1} 
     )
 
 custom_css = """
