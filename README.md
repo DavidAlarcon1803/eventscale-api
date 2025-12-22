@@ -36,12 +36,3 @@ El sistema está desplegado utilizando una infraestructura moderna y distribuida
 * **Cola de Mensajes:** [CloudAMQP](https://www.cloudamqp.com/) (RabbitMQ).
 * **Frontend:** Vercel (Consumo vía Fetch API).
 
-### Diagrama de Flujo Simplificado
-
-```mermaid
-graph TD
-    Client[React Frontend (Vercel)] -->|JSON/Auth| API[EventScale API (Railway)]
-    API -->|Read/Write| DB[(Neon PostgreSQL)]
-    API -->|Publish Task| MQ[CloudAMQP (RabbitMQ)]
-    Worker[Background Worker] -->|Consume Task| MQ
-    Worker -->|Email/Process| External[Servicios Externos]
