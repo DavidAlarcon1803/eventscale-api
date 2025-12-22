@@ -14,14 +14,18 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     
-    # --- NUEVOS CAMPOS DE PERFIL ---
+    # --- DATOS DE PERFIL ---
     full_name = Column(String, nullable=True)
     phone_number = Column(String, nullable=True)
     
-    # --- ESTADO Y SEGURIDAD ---
+    # --- ESTADO ---
     is_active = Column(Boolean, default=True)
     role = Column(SqEnum(UserRole), default=UserRole.USER)
     
-    # --- AUDITORÍA (Timestamps) ---
+    # --- SEGURIDAD (Single Session) ---
+    # Guarda el hash del único token válido. Si es NULL, no hay sesión.
+    active_token_hash = Column(String, nullable=True)
+    
+    # --- AUDITORÍA ---
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
